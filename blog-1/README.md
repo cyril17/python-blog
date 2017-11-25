@@ -6,9 +6,6 @@ title: 运用Django和MySQL搭建本地个人博客主页
 
 ![这里写图片描述](http://img.blog.csdn.net/20161104164540811)
 
-### 注意: 代码存在github中,连接是:    https://github.com/Mrzhangjwei/blog_project
-
-
  里面有一个blogdb.sql文件,是存放数据库和你所用到的各种数据,如果你向在自己电脑上运行成功的话,应该做一下一下几步:
  
 -  在任意目录下输入命令:` mysql -u root -p<[备份文件的保存路径]`,当然在我这个项目里,我的数据库用户名为root.
