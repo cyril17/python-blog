@@ -1,0 +1,47 @@
+{% extends 'dashboard/dash_base.html' %}
+
+{% block title %}讨论设置{{- ' - ' -}}{{- Setting.get_setting('blogtitle', 'Plog') -}}{% endblock %}
+{% block body_class %}dashboard-setting dashboard-setting-discussion{% endblock %}
+
+{% block page_headtitle %}
+<div class="page-title">
+    <div class="title-env">
+        <h1 class="title">讨论设置</h1>
+        <p class="description">网站用户讨论相关选项</p>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{{ url_for('dashboard.dashboard_home') }}">
+                    <span class="glyphicon glyphicon-home"></span>控制板
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('dashboard.settings') }}">设置</a>
+            </li>
+            <li>
+                <a href="{{ url_for('dashboard.discussion_setting') }}">讨论设置</a>
+            </li>
+        </ol>
+    </div>
+    <div class="clearfix"></div>
+</div>
+{% endblock %}
+
+{% block page_content %}
+<section class="content">
+    <form id="setting-discussion" class="" method="post">
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <div class="form-group">
+                <label for="comments-per-page">每页显示评论数</label>
+                <input id="comments-per-page" name="discussion[comments_per_page]" type="number" pattern="[0-9]*" class="num-input ember-view form-control" value="{{ Setting.get_setting('comments_per_page', 20) }}">
+                <p class="help-block">设置每页显示用户评论的数量</p>
+            </div>
+        </fieldset>
+        <div class="submit-btn-env">
+            {{ form.submit(class="btn btn-info", value="保存") }}
+        </div>
+    </form>
+</section>
+{% endblock %}

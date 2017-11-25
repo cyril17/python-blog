@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{{- author.nickname if author else '作者主页' -}}{{- ' - ' -}}{{- Setting.get_setting('subtitle', 'Another Plog Site') -}}{% endblock %}
+
+{% block keywords %}{% endblock %}
+
+{% block description %}{{- author.bio if author and author.bio else '' -}}{% endblock %}
+
+{% block css %}
+    <!--link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"-->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/styles/page-author.css') }}">
+{% endblock %}
+
+{% block header %}
+{% include 'modules/auth_header.html' %}
+{% endblock %}
+
+{% block body_class %}author{% endblock %}
+
+{% block content %}
+<div class="container main col-1">
+    {{ super() }}
+    <div class="wrap-center">
+        <!-- 作者信息 -->
+        <section class="author-profile">
+            <figure class="author-image">
+                <img class="avatar" src="{{ author.get_avatar(size=120) }}">
+            </figure>
+            <h1 class="author-title">{{ author.nickname if author else '' }}</h1>
+            <div class="author-meta">
+                <span class="author-stats">
+                    <i class="glyphicon glyphicon-signal"></i>
+                    {{ author.get_user_posts(count=True) or 0 }}&nbsp;篇文章
+                </span>
+            </div>
+        </section>
+        <!-- 文章列表 -->
+        <section class="article-list index-article-list">
+            {% import 'macros/index_article.html' as article_render %}
+            {% for post in posts %}
+                {{ article_render.render_article_item(post) }}
+            {% endfor %}
+        </section>
+        <!-- End 文章列表 -->
+        <!-- 分页 -->
+        <div class="pagination clearfix">
+        {% if pagenation.has_prev or pagenation.has_next %}
+            {% if pagenation.has_prev %}
+            <a href="{{ url_for('main.user_homepage_paged', page=pagenation.prev_num, user_id=author.user_id) }}" class="prev transition">上一页</a>
+            {% else %}
+            <a href="javascript:void(0)" class="prev disabled">上一页</a>
+            {% endif %}
+            {% if pagenation.has_next %}
+            <a href="{{ url_for('main.user_homepage_paged', page=pagenation.next_num, user_id=author.user_id) }}" class="next transition">下一页</a>
+            {% else %}
+            <a href="javascript:void(0)" class="next disabled">下一页</a>
+            {% endif %}
+        {% endif %}
+        </div>
+        <!-- End 分页 -->
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+{% include 'modules/common_footer.html' %}
+{% endblock %}
+
+{% block script %}
+<!--script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script-->
+<script type="text/javascript" src="{{ url_for('static', filename='dist/scripts/libs/jquery/2.2.0/jquery.min.js') }}"></script>
+<!--script type="text/javascript" src="{{ url_for('static', filename='dist/scripts/page-author.js') }}"></script-->
+{% endblock %}

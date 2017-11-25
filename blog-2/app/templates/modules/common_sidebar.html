@@ -1,0 +1,17 @@
+<div class="wrap-right pull-right sidebar" id="sidebar">
+    <!-- Ad -->
+    <div class="widget widget-gg">
+        <div class="widget-body">
+            <a href="javascript:alert('AD')" target="_blank">
+                <img src="http://images.huxiu.com/qunzu/201602/18/090347939825.png?imageView2/1/w/680/h/380/imageMogr2/strip/interlace/1/format/jpg" />
+            </a>
+        </div>
+    </div>
+    <!-- End Ad -->
+    <!-- 热门文章 -->
+    {% import 'macros/widget_articles.html' as widget_articles_render %}
+    <div class="widget widget-hot-articles">
+        {{ widget_articles_render.render_hot_articles(Post.get_top_viewed_posts(5)) }}
+    </div>
+    <!-- End 热门文章 -->
+</div>

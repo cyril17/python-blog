@@ -1,0 +1,28 @@
+<!-- 页脚 -->
+<footer class="footer">
+    <div class="container footer-inner">
+        <div class="footer-nav">
+            {% if Setting.get_setting('link') and (json.loads(Setting.get_setting('link'))).get('links') %}
+                {% for link_setting in (json.loads(Setting.get_setting('link'))).get('links') %}
+                    <a href="{{ link_setting.values()[0] or 'javascript:void(0)' }}" class="transition">
+                        {{- link_setting.keys()[0] -}}
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="copy-right">
+            Copyright &copy; {{ datetime.utcnow().strftime('%Y') }}
+            <a href="{{ url_for('main.index') }}"><strong>{{ Setting.get_setting('blogtitle', 'Plog') }}</strong></a>
+            &nbsp;沪ICP备14045138号-1&nbsp;&nbsp;Powered by <a href="http://www.test.com/" target="_blank" title="Plog博客程序"><strong>Plog</strong></a><!-- TODO change to formal link -->
+        </div>
+        <div class="footer-icons pull-right">
+            <!-- 新浪微博 -->
+            <a href="http://weibo.com/touchumind" target="_blank" class="weibo"><i class="icon icon-weibo"></i></a>
+            <!-- 微信 -->
+            <a href="javascript:void(0)" class="weixin"><i class="icon icon-weixin"></i></a>
+            <!-- RSS -->
+            <a href="{{ url_for('main.rss') }}" target="_blank" class="rss"><i class="icon icon-rss"></i></a>
+        </div>
+    </div>
+</footer>
+<!-- End 页脚 -->

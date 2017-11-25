@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{- Setting.get_setting('blogtitle', 'Plog') -}}{{- ' - ' -}}{{- Setting.get_setting('subtitle', 'Another Plog Site') -}}
+{% endblock %}
+
+{% block keywords %}
+{{- Setting.get_setting('keywords') -}}
+{% endblock %}
+
+{% block description %}
+{{- Setting.get_setting('description') -}}
+{% endblock %}
+
+{% block css %}
+    <!--link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"-->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/styles/page-home.css') }}">
+{% endblock %}
+
+{% block header %}
+{% include 'modules/common_header.html' %}
+{% endblock %}
+
+{% block body_class %}home abs-header{% endblock %}
+
+{% block content %}
+<div class="container main col-2">
+    {{ super() }}
+    <div class="wrap-left pull-left">
+        <!-- Banner L1 -->
+        <div class="big-banner hover-scale">
+            <div class="back-img">
+                <img src="{{ Setting.get_setting('big_banner') }}" alt="#todo">
+            </div>
+            <a href="{{ Setting.get_setting('big_banner_link') }}" target="_blank">
+                <div class="banner-content">
+                    <h1 class="banner-h1">{{ Setting.get_setting('big_banner_title') }}</h1>
+                </div>
+            </a>
+        </div>
+        <!-- Banner L2 -->
+        <div class="big-banner2 hover-scale pull-left">
+            <div class="back-img">
+                <img src="{{ Setting.get_setting('tiny_banner1') }}" alt="#todo">
+            </div>
+            <a href="{{ Setting.get_setting('tiny_banner1_link') }}" target="_blank">
+                <div class="banner-content">
+                    <h2 class="banner-h2">{{ Setting.get_setting('tiny_banner1_title') }}</h2>
+                </div>
+            </a>
+        </div>
+        <div class="big-banner2 hover-scale pull-right">
+            <div class="back-img">
+                <img src="{{ Setting.get_setting('tiny_banner2') }}" alt="#todo">
+            </div>
+            <a href="{{ Setting.get_setting('tiny_banner2_link') }}" target="_blank">
+                <div class="banner-content">
+                    <h2 class="banner-h2">{{ Setting.get_setting('tiny_banner2_title') }}</h2>
+                </div>
+            </a>
+        </div>
+        <!-- 文章列表 -->
+        <section class="article-list index-article-list">
+            {% import 'macros/index_article.html' as article_render %}
+            {% for post in posts %}
+                {{ article_render.render_article_item(post) }}
+            {% endfor %}
+        </section>
+        <!-- End 文章列表 -->
+        <!-- 分页 -->
+        <div class="pagination clearfix">
+        {% if pagenation.has_prev or pagenation.has_next %}
+            {% if pagenation.has_prev %}
+            <a href="{{ url_for('main.index_paged', page=pagenation.prev_num) }}" class="prev transition">上一页</a>
+            {% else %}
+            <a href="javascript:void(0)" class="prev disabled">上一页</a>
+            {% endif %}
+            {% if pagenation.has_next %}
+            <a href="{{ url_for('main.index_paged', page=pagenation.next_num) }}" class="next transition">下一页</a>
+            {% else %}
+            <a href="javascript:void(0)" class="next disabled">下一页</a>
+            {% endif %}
+        {% endif %}
+        </div>
+        <!-- End 分页 -->
+    </div>
+    <!-- Sidebar -->
+    {% include 'modules/common_sidebar.html' %}
+    <!-- End Sidebar -->
+</div>
+{% endblock %}
+{% block footer %}
+{% include 'modules/common_footer.html' %}
+{% endblock %}
+
+{% block script %}
+<!--script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script-->
+<script type="text/javascript" src="{{ url_for('static', filename='dist/scripts/libs/jquery/2.2.0/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dist/scripts/page-home.js') }}"></script>
+{% endblock %}

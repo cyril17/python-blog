@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title+' - ' if post else '文章 - ' }}{{- Setting.get_setting('blogtitle', 'Plog') -}}{% endblock %}
+
+{% block keywords %}{{ post.meta_title if post else '' }}{% endblock %}
+{% block description %}{{ post.meta_description if post else '' }}{% endblock %}
+
+{% block css %}
+    <!--link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"-->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/styles/page-article.css') }}">
+    {% if post %}
+    <link rel='canonical' href='{{ url_for('main.article_detail', post_id=post.post_id, _external=True) }}' /> <!-- 保留权重 -->
+    {% endif %}
+{% endblock %}
+
+{% block header %}
+{% include 'modules/common_header.html' %}
+{% endblock %}
+
+{% block body_class %}single abs-header{% endblock %}
+
+{% block content %}
+<div class="container main col-2">
+    {{ super() }}
+    <div class="wrap-right pull-right">
+        <!-- 文章 -->
+        <div class="article-section" id="{{ 'article-section-'+str(post.post_id) }}" data-aid="{{ post.post_id }}" data-url="{{ post.get_permalink(external=True) }}">
+            <article class="single-article">
+                <section class="single-article-header">
+                    <h1>{{ post.title }}</h1>
+                    <div class="meta">
+                        <a href="{{ author.get_homepage() }}">
+                            <img class="avatar" src="{{ author.get_avatar(size=30) }}" />
+                            <span class="name">{{ author.nickname or author.name }}</span>
+                        </a>
+                        <span class="time">
+                            <abbr title="{{ post.create_at.strftime('%Y-%m-%d %H:%M:%S +0800') }}">{{- ' • ' + post.create_at.strftime('%Y/%m/%d %H:%M') -}}</abbr>
+                        </span>
+                    </div>
+                    <div class="head-thumb">
+                        {% if post.image %}
+                        <img src="post.image" />
+                        {% endif %}
+                        <img src="http://b.36krcnd.com/nil_class/6e456c38-eed9-411f-8b88-664280fe39b9/QQ20160218-5.png!heading" /> <!-- TODO clear -->
+                    </div>
+                </section>
+                <br>
+                <section class="article content">
+                    {{ Markup(post.html) }}
+                </section>
+                <!-- AD -->
+                <section class="gg">
+                <!-- TODO AD -->
+                </section>
+                <!-- 打赏 -->
+                <section class="donate">
+                    <div class="inner">
+                        <a class="pay" href="javascript:void(0)">赏
+                            <span class="qr-wrap">
+                                <img src="https://mobilecodec.alipay.com/show.htm?code=rex034926uxjbccnlfyygc3" alt="" /> <!-- TODO donate -->
+                                <b>支付宝 扫一扫</b>
+                            </span>
+                        </a>
+                    </div>
+                </section>
+                <!-- 标签 -->
+                <section class="tags">
+                    {% import 'macros/article_tags.html' as tag_macro %}
+                    {{ tag_macro.output_tags(post.get_tags() if post else None) }}
+                </section>
+                <!-- 分享 -->
+                <section class="share">
+                    <!-- TODO share -->
+                </section>
+            </article>
+            <!-- 相关文章 -->
+            <section class="single-article-relate">
+                <!-- TODO relate -->
+            </section>
+            <!-- 评论 -->
+            <section class="single-article-comments" id="comments" data-aid="{{ post.post_id }}">
+                <!--{ include 'modules/comments.html' }-->
+                <!-- DISQUS -->
+                <!--a href="{{ url_for('main.article_detail', post_id=post.post_id, _external=True) }}#disqus_thread">Count</a-->
+                <!--span class="disqus-comment-count" data-disqus-identifier="{{ post.post_id if post else 0 }}"></span-->
+                <div id="disqus_thread"></div>
+                <script>
+                /**
+                * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+                */
+
+                var disqus_config = function () {
+                    this.page.url = "{{ url_for('main.article_detail', post_id=post.post_id, _external=True) }}"; // Replace PAGE_URL with your page's canonical URL variable
+                    this.page.identifier = {{ post.post_id }}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
+
+                (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = '//parser.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+                <!-- END DISQUS -->
+            </section>
+        </div>
+        <!-- End 文章 -->
+    </div>
+    <!-- Sidebar -->
+    {% include 'modules/article_sidebar.html' %}
+    <!-- End Sidebar -->
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include 'modules/common_footer.html' %}
+{% endblock %}
+
+{% block script %}
+<!--script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script-->
+<script type="text/javascript" src="{{ url_for('static', filename='dist/scripts/libs/jquery/2.2.0/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dist/scripts/page-article.js') }}"></script>
+<script id="dsq-count-scr" src="//parser.disqus.com/count.js" async></script>
+{% endblock %}
